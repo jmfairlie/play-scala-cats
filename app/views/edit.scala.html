@@ -1,0 +1,64 @@
+@(catform: Form[EditCatForm], id:Long)(implicit messages: Messages)
+
+@import helper._
+@import play.api.Logger
+
+
+@*----------------------------------------------*
+ *  helper function for getting right cat image *
+ *----------------------------------------------*@
+@imgname(str:String) = @{
+  var img = ""
+  if (!str.isEmpty) {
+        img = s"/assets/uploads/$str"
+  } else {
+        img = "/assets/uploads/unknown.png"
+  }
+  img
+}
+  
+
+
+@main("Edit Cat!") {
+  <div class="container">
+  <h2>Edit A Kitten!</h2>
+  <script type='text/javascript' src='@routes.Assets.versioned("javascripts/jscolor/jscolor.js")'></script>
+  <table>
+  <tr> 
+    <td>
+    @form(routes.CatController.saveCat(id: Long), 'enctype -> "multipart/form-data") {
+	 
+	    @input(catform("id")) { (id, name, value, args) =>
+        <input type="text" name="@name" id="@id" value="@value" disabled @toHtmlArgs(args)>
+        }
+	    
+		@inputText(catform("name"))
+		
+		@input(catform("color")) { (id, name, value, args) =>
+        <input type="text" name="@name" id="@id" value="@value" class="color {hash:true}"  @toHtmlArgs(args)>
+        }
+
+		@select(catform("breed"), options("0"->"Abyssinian", "1"->"Aegean","2"->"American Curl", "3"->"Arabian Mau","4"->"Asian", "5"->"Bengal","6"->"Chartreux", "7"->"Khao Manee","8"->"Turkish Angora", "9"->"Ukrainian Levkoy"))
+		@select(catform("gender"), options("0"->"Male", "1"->"Female"))
+        
+        
+        @input(catform("filename")) { (id, name, value, args) =>
+        <input type="file" name="@name" id="@id" value="@value" accept=".jpeg, .jpg, .png, .gif"  @toHtmlArgs(args)>
+        }
+        
+        <input type="hidden" class="oldfile" name="oldfile" id="oldfile" value='@catform("filename").value.getOrElse(catform("oldfile").value.getOrElse(""))'>
+        
+		<div class="buttons">
+			<input type="submit" value="Update Kitten"/>
+		</div>
+	</td>
+	<td >
+        <a href='@imgname(catform("filename").value.getOrElse(catform("oldfile").value.getOrElse("")))'> 
+            <img src='@imgname(catform("filename").value.getOrElse(catform("oldfile").value.getOrElse("")))' height="200px">
+        </a>
+    </td>
+
+	}
+    </tr>
+ </table>
+}

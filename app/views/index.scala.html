@@ -1,0 +1,35 @@
+@(cat: Form[CreateCatForm])(implicit messages: Messages)
+
+@import helper._
+
+@main("Kittens Kittens!") {
+
+ <div class="container">
+ <h2>Add A Kitten!</h2>
+ <script type='text/javascript' src='@routes.Assets.versioned("javascripts/jscolor/jscolor.js")'></script>
+ @form(routes.CatController.addCat(), 'enctype -> "multipart/form-data") {
+		@inputText(cat("name"))
+		<dl id="color_field">
+            <dt><label for="color">Color</label></dt>
+            <dd>
+                <input type="text" id="color" name="color" class="color {hash:true}" value="" />
+            </dd>
+            <dd class="info">Required</dd>
+        </dl>
+		@select(cat("breed"), options("0"->"Abyssinian", "1"->"Aegean","2"->"American Curl", "3"->"Arabian Mau","4"->"Asian", "5"->"Bengal","6"->"Chartreux", "7"->"Khao Manee","8"->"Turkish Angora", "9"->"Ukrainian Levkoy"))
+		@select(cat("gender"), options("0"->"Male", "1"->"Female"))
+        @input(cat("filename")) { (id, name, value, args) =>
+        <input type="file" name="@name" id="@id" value="@value" accept=".jpeg, .jpg, .png, .gif"  @toHtmlArgs(args)>
+        }
+		<div class="buttons">
+			<input type="submit" value="Add Kitten"/>
+		</div>
+	}
+ </div>
+ 
+<script type='text/javascript' src='@routes.Assets.versioned("javascripts/index.js")'></script>
+<div id="clowderdiv" class="container">
+    <h2>Kitten List</h2>
+	<table id="catstable"></table>
+</div>
+}

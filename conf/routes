@@ -1,0 +1,14 @@
+# Routes
+# This file defines all application routes (Higher priority routes first)
+# ~~~~
+
+# Home page
+GET     /                        controllers.CatController.index
+POST    /cat                     controllers.CatController.addCat
+POST    /save                    controllers.CatController.saveCat(id:Long)
+GET     /cats                    controllers.CatController.getCats
+GET     /delete/:id              controllers.CatController.deleteCat(id: Long)
+GET     /cat/:id                 controllers.CatController.editCat(id: Long)
+
+# Map static resources from the /public folder to the /assets URL path
+GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)
