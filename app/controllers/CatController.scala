@@ -59,36 +59,8 @@ class CatController @Inject() (repo: CatRepository, val messagesApi: MessagesApi
    */
   def addCat = Action.async(parse.multipartFormData) { implicit request =>
     
-    val params = request.body.asFormUrlEncoded
-    Logger.info(s"addCat: params=$params")
-    var filename : String = ""
-    
-    request.body.file("filename").map 
-    { 
-        picture =>
-        import java.io.File
-        import play.api.Play.current
-        filename = picture.filename
-        val contentType = picture.contentType
-        
-        for( s <- Play.application.path.list) {
-            Logger.info(s)
-        }
-        
-        val f = new File(s"public/uploads/$filename")
-        if (!f.exists)
-        {
-            picture.ref.moveTo(f)
-            Logger.info(s"uploaded file $f")
-        }
-        else
-        {
-            Logger.info(s"filename already exists $f.getAbsolutePath $f.getName")
-        }
-        
-        Ok("File uploaded")
-    }
-    
+    val filename : String = uploadFile(request)
+
     catForm.bindFromRequest.fold(
      
       errorForm => {
@@ -115,26 +87,7 @@ class CatController @Inject() (repo: CatRepository, val messagesApi: MessagesApi
   
     def saveCat(id: Long) = Action.async(parse.multipartFormData) { implicit request =>
       
-      var filename : String = ""
-      request.body.file("filename").map 
-      { 
-            picture =>
-            import java.io.File
-            filename = picture.filename
-            Logger.info(s"filename from request body: $filename")
-            val contentType = picture.contentType
-            val f = new File(s"public/uploads/$filename")
-            if (!f.exists)
-            {
-                picture.ref.moveTo(f)
-                Logger.info(s"uploaded file $f")
-            }
-            else
-            {
-                Logger.info(s"filename already exists $f.getAbsolutePath $f.getName")
-            }
-            Ok("File uploaded")
-      }
+      val filename : String = uploadFile(request)
      
       editForm.bindFromRequest.fold(
      
@@ -169,7 +122,39 @@ class CatController @Inject() (repo: CatRepository, val messagesApi: MessagesApi
       Ok(Json.toJson(clowder))
     }
   }
+  
+  def uploadFile(request:Request[MultipartFormData[libs.Files.TemporaryFile]]): String =
+  {
+    var filename : String = ""
+    request.body.file("filename").map 
+    { 
+        picture =>
+        import java.io.File
+        filename = picture.filename
+        Logger.info(s"filename from request body: $filename")
+        val contentType = picture.contentType
+        val f = new File(s"public/uploads/$filename")
+        if (!f.exists)
+        {
+            val dir = new File("public/uploads")
+            if (!dir.exists)
+            {
+                dir.mkdirs
+            }
+            picture.ref.moveTo(f)
+            Logger.info(s"uploaded file $f")
+        }
+        else
+        {
+            Logger.info(s"filename already exists $f")
+        }
+        Ok("File uploaded")
+    }
+    return filename
+  }
 }
+
+
 
 
 case class CreateCatForm(name: String, color: String, breed: Int, gender: Int)
