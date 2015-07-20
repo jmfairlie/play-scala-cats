@@ -139,7 +139,8 @@ class CatController @Inject() (repo: CatRepository, val messagesApi: MessagesApi
             val dir = new File("public/uploads")
             if (!dir.exists)
             {
-                dir.mkdirs
+                val b = dir.mkdirs
+                Logger.info(s"creating folder $dir : $b")
             }
             picture.ref.moveTo(f)
             Logger.info(s"uploaded file $f")
