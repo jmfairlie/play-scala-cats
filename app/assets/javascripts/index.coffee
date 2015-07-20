@@ -22,7 +22,7 @@ $ ->
       if !!cat.filename
         image = $("<img>").attr('src',"/assets/uploads/"+cat.filename).attr('width','80').attr('height','80')
       else
-        image = $("<img>").attr('src',"/assets/uploads/unknown.png").attr('width','80').attr('height','80')
+        image = $("<img>").attr('src',"/assets/images/unknown.png").attr('width','80').attr('height','80')
       filename = $("<td>").addClass("filename").append(image)
       
       $("#catstable").append $("<tr>").append(dele).append(edit).append(name).append(color).append(breed).append(gender).append(filename)

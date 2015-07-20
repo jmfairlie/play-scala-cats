@@ -55,7 +55,7 @@ class CatRepository @Inject() (dbConfigProvider: DatabaseConfigProvider)(implici
 
  
   def create(name: String, color: String, breed: Int, gender: Int, filename: String): Future[Cat] = db.run {
-   
+    Logger.info(s"repo.create($name, $color, $breed, $gender, $filename)")
     (
       clowder.map(c => (c.name, c.color, c.breed, c.gender, c.filename))
      
@@ -69,6 +69,7 @@ class CatRepository @Inject() (dbConfigProvider: DatabaseConfigProvider)(implici
    * Update cat
    */
   def update(id: Long, name: String, color: String, breed: Int, gender: Int, filename: String) = db.run {
+    Logger.info(s"repo.update($id, $name, $color, $breed, $gender, $filename)")
     if (filename.isEmpty())
     {
         clowder.filter(_.id === id).map( c => (c.name, c.color, c.breed, c.gender)).update((name, color, breed, gender))

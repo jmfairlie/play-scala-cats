@@ -67,13 +67,28 @@ class CatController @Inject() (repo: CatRepository, val messagesApi: MessagesApi
     { 
         picture =>
         import java.io.File
+        import play.api.Play.current
         filename = picture.filename
         val contentType = picture.contentType
-        picture.ref.moveTo(new File(s"public/uploads/$filename"))
+        
+        for( s <- Play.application.path.list) {
+            Logger.info(s)
+        }
+        
+        val f = new File(s"public/uploads/$filename")
+        if (!f.exists)
+        {
+            picture.ref.moveTo(f)
+            Logger.info(s"uploaded file $f")
+        }
+        else
+        {
+            Logger.info(s"filename already exists $f.getAbsolutePath $f.getName")
+        }
+        
         Ok("File uploaded")
     }
     
-
     catForm.bindFromRequest.fold(
      
       errorForm => {
@@ -98,9 +113,28 @@ class CatController @Inject() (repo: CatRepository, val messagesApi: MessagesApi
       }
   }
   
-    def saveCat(id: Long) = Action.async(parse.multipartFormData)
-  {
-      implicit request =>
+    def saveCat(id: Long) = Action.async(parse.multipartFormData) { implicit request =>
+      
+      var filename : String = ""
+      request.body.file("filename").map 
+      { 
+            picture =>
+            import java.io.File
+            filename = picture.filename
+            Logger.info(s"filename from request body: $filename")
+            val contentType = picture.contentType
+            val f = new File(s"public/uploads/$filename")
+            if (!f.exists)
+            {
+                picture.ref.moveTo(f)
+                Logger.info(s"uploaded file $f")
+            }
+            else
+            {
+                Logger.info(s"filename already exists $f.getAbsolutePath $f.getName")
+            }
+            Ok("File uploaded")
+      }
      
       editForm.bindFromRequest.fold(
      
@@ -109,18 +143,6 @@ class CatController @Inject() (repo: CatRepository, val messagesApi: MessagesApi
       },
       
       cat => {
-          var filename : String = ""
-          request.body.file("filename").map 
-          { 
-                picture =>
-                import java.io.File
-                filename = picture.filename
-                Logger.info(s"filename from request body: $filename")
-                val contentType = picture.contentType
-                picture.ref.moveTo(new File(s"public/uploads/$filename"))
-                Ok("File uploaded")
-          }
-         
           repo.update(cat.id, cat.name, cat.color, cat.breed, cat.gender, filename).map { _ =>
           // If successful, we simply redirect to the index page.
           Redirect(routes.CatController.index)
