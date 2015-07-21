@@ -20,7 +20,7 @@ $ ->
       gender = $("<td>").addClass("gender").text if cat.gender == 0 then "Male" else "Female"
       
       if !!cat.filename
-        image = $("<img>").attr('src',"/assets/uploads/"+cat.filename).attr('width','80').attr('height','80')
+        image = $("<img>").attr('src',"/uploads/"+cat.filename).attr('width','80').attr('height','80')
       else
         image = $("<img>").attr('src',"/assets/images/unknown.png").attr('width','80').attr('height','80')
       filename = $("<td>").addClass("filename").append(image)

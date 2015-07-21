@@ -133,10 +133,10 @@ class CatController @Inject() (repo: CatRepository, val messagesApi: MessagesApi
         filename = picture.filename
         Logger.info(s"filename from request body: $filename")
         val contentType = picture.contentType
-        val f = new File(s"public/uploads/$filename")
+        val f = new File(s"uploads/$filename")
         if (!f.exists)
         {
-            val dir = new File("public/uploads")
+            val dir = new File("uploads")
             if (!dir.exists)
             {
                 val b = dir.mkdirs
@@ -153,9 +153,8 @@ class CatController @Inject() (repo: CatRepository, val messagesApi: MessagesApi
     }
     return filename
   }
+  
 }
-
-
 
 
 case class CreateCatForm(name: String, color: String, breed: Int, gender: Int)

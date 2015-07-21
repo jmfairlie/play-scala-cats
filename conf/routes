@@ -11,4 +11,6 @@ GET     /delete/:id              controllers.CatController.deleteCat(id: Long)
 GET     /cat/:id                 controllers.CatController.editCat(id: Long)
 
 # Map static resources from the /public folder to the /assets URL path
-GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)
+GET     /assets/*file            controllers.Assets.versioned(path="/public", file: Asset)
+GET     /uploads/*file           controllers.CatFileServer.serveUploadedFiles(file: String)
+#GET     /uploads/*file           controllers.ExternalAssets.at(path="uploads", file: String)

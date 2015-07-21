@@ -10,7 +10,7 @@
 @imgname(str:String) = @{
   var img = ""
   if (!str.isEmpty) {
-        img = s"/assets/uploads/$str"
+        img = s"/uploads/$str"
   } else {
         img = "/assets/images/unknown.png"
   }
@@ -22,7 +22,7 @@
 @main("Edit Cat!") {
   <div class="container">
   <h2>Edit A Kitten!</h2>
-  <script type='text/javascript' src='@routes.Assets.versioned("javascripts/jscolor/jscolor.js")'></script>
+  <script type='text/javascript' src='/assets/javascripts/jscolor/jscolor.js'></script>
   <table>
   <tr> 
     <td>

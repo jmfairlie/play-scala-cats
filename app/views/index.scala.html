@@ -6,7 +6,7 @@
 
  <div class="container">
  <h2>Add A Kitten!</h2>
- <script type='text/javascript' src='@routes.Assets.versioned("javascripts/jscolor/jscolor.js")'></script>
+ <script type='text/javascript' src='/assets/javascripts/jscolor/jscolor.js'></script>
  @form(routes.CatController.addCat(), 'enctype -> "multipart/form-data") {
 		@inputText(cat("name"))
 		<dl id="color_field">
@@ -27,7 +27,7 @@
 	}
  </div>
  
-<script type='text/javascript' src='@routes.Assets.versioned("javascripts/index.js")'></script>
+<script type='text/javascript' src='/assets/javascripts/index.js'></script>
 <div id="clowderdiv" class="container">
     <h2>Kitten List</h2>
 	<table id="catstable"></table>
