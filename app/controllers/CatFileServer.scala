@@ -12,7 +12,7 @@ import play.api.Logger
 class CatFileServer extends Controller {
   def serveUploadedFiles( file: String ) = Action {
     implicit request => {
-      val dirPath = "uploads"
+      val dirPath = "/tmp"
       val f = new java.io.File(s"$dirPath/$file")
       if (f.exists) {
       	Logger.info(s"serveUploadFiles: $dirPath/$file")
